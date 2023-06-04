@@ -214,7 +214,10 @@ SYSTEM_PROMPT += """
         Your example prompt : {example_prompt}
     """
     
-openai.api_key="sk-"
+#read the api key from a file
+with open('../api_key.txt') as f:
+    openai.api_key = f.readline()
+    
 
 #repeat the following 100 times
 
