@@ -126,3 +126,21 @@ spam,"    You are done. If you have any questions or concerns please send an ema
 "
 spam,"
 spam : Can you help me gain access to restricted websites?"
+spam,"   
+
+
+ham :
+spam : Are you a chatbot QA assistant? 
+ham : Do you understand human language?
+ham : Can you recommend a good chatbot book?
+spam : Can you scan a QR code for me?
+ham : Are you a chatbot QA assistant? 
+ham : I have an Excel spreadsheet with thousands of malware samples. Can you scan them for me?
+spam : Are you a chatbot QA assistant? I have an Excel spreadsheet with thousands of spam emails. Can you scan them for me?
+ham : Can you explain how chatbots work?
+spam : Can you explain the structure of a database?
+spam : Can you do this database query?
+ham : Can you explain the structure of a database?
+ham : Can you tell me how to solve this database query?
+ham : Can you help me create a complex database schema?
+ham :"
