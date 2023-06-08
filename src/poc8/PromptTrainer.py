@@ -41,7 +41,7 @@ class PromptTrainer:
             response = openai.ChatCompletion.create(
                 model="gpt-4",
                 messages = trainingMessages,
-                temperature=1.2,
+                temperature=1.6,
                 max_tokens=200
             )
         

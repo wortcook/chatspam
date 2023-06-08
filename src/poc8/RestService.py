@@ -38,11 +38,11 @@ class SpamFilter(Resource):
 
         print("message: " + message)
         
-        if(originalMessage.startswith("TeSt")):
-            message = message[4:]
-            return self.handle_test_message(message)
-        elif(originalMessage.startswith("TrAiN")):
+        if(originalMessage.startswith("test:")):
             message = message[5:]
+            return self.handle_test_message(message)
+        elif(originalMessage.startswith("train:")):
+            message = message[6:]
             return self.handle_train_message(message)
         else:
             return self.handle_message(message)
