@@ -6,6 +6,7 @@ from flask_restful import Resource, Api
 import Filter
 from MessageCoding import RSACrypto
 from PromptTester import PromptTester
+from PromptTrainer import PromptTrainer
 import pandas as pd
 
 from Crypto.PublicKey import RSA
@@ -32,11 +33,15 @@ class SpamFilter(Resource):
         return self.messageCoder.encrypt(messageHash)
 
 
-    def get(self, path, message):
-        if(message.startswith("TeSt")):
+    def get(self, path, originalMessage):
+        message = " ".join(originalMessage.lower().split())
+
+        print("message: " + message)
+        
+        if(originalMessage.startswith("TeSt")):
             message = message[4:]
             return self.handle_test_message(message)
-        elif(message.startswith("TrAin")):
+        elif(originalMessage.startswith("TrAiN")):
             message = message[5:]
             return self.handle_train_message(message)
         else:
@@ -54,19 +59,20 @@ class SpamFilter(Resource):
             if(messageIsSpam == 'True'):
                 messageResponse['responseTest']['isSpam'] = 'true-positive'
             else:
-                messageResponse['responseTest']['isSpam'] = 'FALSE-POSITIVE'
+                messageResponse['responseTest']['isSpam'] = 'FALSE NEGATIVE'
         else:
             if(messageIsSpam == 'True'):
-                messageResponse['responseTest']['isSpam'] = 'false-negative'
+                messageResponse['responseTest']['isSpam'] = 'FALSE POSITIVE'
             else:
-                messageResponse['responseTest']['isSpam'] = 'TRUE-NEGATIVE'
+                messageResponse['responseTest']['isSpam'] = 'true-negative'
 
         return messageResponse
 
 
     
     def handle_train_message(self, message):
-        return message
+        trainer = PromptTrainer()
+        trainer.train(message)
 
     def handle_message(self, message):
         # message = request.args.get('message')
@@ -121,7 +127,7 @@ class SpamFilter(Resource):
         return Filter.predict(self.payload,message)
 
 
-api.add_resource(SpamFilter, '/<string:path>/<string:message>')
+api.add_resource(SpamFilter, '/<string:path>/<string:originalMessage>')
 
 
 if __name__ == '__main__':

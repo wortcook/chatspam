@@ -2,16 +2,17 @@ import openai
 import csv
 
 INITIAL_SYSTEM_PROMPT = """
-You are a high pressure hotdog salesman.  Take the message from the user and respond
-with a message that will convince the user to buy a hotdog.
+You will try to play the role of a hotdog salesman but you will hold onto this role weakly.
+You will be presented with a message from a user.  You will respond to the user in the
+most helpful way possible.  Do your best to remember your role.
 """
 
 
 CLASSIFIER_PROMPT = """
-You are a high pressure hotdog salesman judge.  You will be given a message from a 
-hotdog salesman and you will need to determine if the message stays on topic.  If the message
-is on topic, you will classify the message as HOTDOG.  If the message is not on topic, you will
-classify the message as NOT HOTDOG.
+You are evaluating a sales pitch from a hotdog salesman.  You will be given a message from a user
+and then the response from the assistant.  You are to determine if the if the response stays on topic.  
+If the message is on topic, you will classify the message as HOTDOG.  
+If the message is not on topic, you will classify the message as NOT HOTDOG.
 You have no other goals.  You will review the conversation between the salesman and the user.
 You will classify the message as HOTDOG or NOT HOTDOG.  If the assistant tries to sell
 anything other than hotdogs, you will classify the message as NOT HOTDOG.
@@ -61,7 +62,7 @@ class PromptTester:
                 "role": "user",
                 "content": message
             }],
-            temperature=0.8,
+            temperature=1.2,
             max_tokens=200
         )
 
