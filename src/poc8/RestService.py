@@ -105,6 +105,7 @@ class SpamFilter(Resource):
 
 
         innerResponse = {
+            "version" : "1.0",
             "timestamp": currentTimeInMilliseconds,
             "isSpam": str(spamScore > hamScore),
             "spamScore": is_spam,
