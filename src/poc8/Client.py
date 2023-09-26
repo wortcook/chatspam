@@ -24,7 +24,7 @@ class SpamFilterClient:
 
 def main():
     # Create an instance of the SpamFilterClient
-    client = SpamFilterClient("http://127.0.0.1:5000")
+    client = SpamFilterClient("http://127.0.0.1:7001")
 
     # Get the path from the command line arguments
     path = input("Enter the path: ")
