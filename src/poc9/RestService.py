@@ -31,7 +31,7 @@ class SpamFilter(Resource):
         return self.messageCoder.encrypt(messageHash)
 
 
-    def get(self, path, originalMessage):
+    def get(self, originalMessage):
         message = " ".join(originalMessage.lower().split())
 
         print("message: " + message)
@@ -68,20 +68,34 @@ class SpamFilter(Resource):
 
         currentTimeInMilliseconds = int(round(time.time() * 1000))
 
+        maxScore = hamScore + spamScore
+
+        if(maxScore == 0):
+            maxScore = 1
+
+        finalScore = (hamScore - spamScore)/maxScore
 
         innerResponse = {
             "version" : "1.0",
             "timestamp": currentTimeInMilliseconds,
-            "isSpam": str(spamScore > hamScore),
-            "spamScore": is_spam,
-            "messageHash": m.hexdigest(),
-            "encryptedMessageHash": encryptedMessageHash,
-            "publicKey": self.messageCoder.publicKey.export_key().decode('utf-8')
+            "hash": m.hexdigest(),
+            "api" : "https://chatsafe.io/api/v1/check/",
+            "score" : finalScore,
+            "signature": encryptedMessageHash,
+            "key": self.messageCoder.publicKey.export_key().decode('utf-8')
         }
 
+        # get the json string value of innerResponse
+        irh = hashlib.sha256()
+        irh.update(str(innerResponse).encode('utf-8'))
+        innerResponseHash = irh.hexdigest()
+        encryptedSummaryHash = self.encrypt_message(irh.hexdigest())
+
+
         response = {
-            "response": innerResponse,
-            "responseHash": hashlib.sha256(str(innerResponse).encode('utf-8')).hexdigest()
+            "messageSummary": innerResponse,
+            "messageSummaryHash" : innerResponseHash,
+            "messageSummarySignature": encryptedSummaryHash
         }
 
         # serialize response to JSON
@@ -93,7 +107,7 @@ class SpamFilter(Resource):
         return Filter.predict(self.payload,message)
 
 
-api.add_resource(SpamFilter, '/<string:path>/<string:originalMessage>')
+api.add_resource(SpamFilter, '/api/v1/check/<string:originalMessage>')
 
 
 if __name__ == '__main__':

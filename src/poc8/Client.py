@@ -38,7 +38,7 @@ def main():
             break
 
         # Send the message to the SpamFilter service
-        response = client.send_message(path, message)
+        response = client.send_message('api/v1/check', message)
 
         # If the request was successful, print the response data
         if response is not None:
